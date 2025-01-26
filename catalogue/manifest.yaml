@@ -42,11 +42,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: catalogue
   namespace: roboshop
 spec:
   selector:
-    app: mongodb
+    app: catalogue
     project: roboshop
     tier: app
 # the following means that if someone hits the service on port 27017 , it will be redirected to container.

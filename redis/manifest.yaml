@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: reids
-        image: pkainnet/reids:v1
+        image: reids
         imagePullPolicy: Always
 ---
 # reids service is internal

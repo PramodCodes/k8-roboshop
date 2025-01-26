@@ -1,40 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reids
+  name: redis
   namespace: roboshop
   labels: #THESER ARE DEPLOYMENT LEVEL LABELS
-    app: reids
+    app: redis
     project: roboshop
     tier: db
 spec:
   replicas: 1
   selector:
     matchLabels: #THESE ARE replica set LEVEL LABELS to find pods
-      app: reids
+      app: redis
       project: roboshop
       tier: db
   template:
     metadata:
       labels: # THESE ARE POD LABELS
-        app: reids
+        app: redis
         project: roboshop
         tier: db
     spec:
       containers:
-      - name: reids
-        image: reids
+      - name: redis
+        image: redis
         imagePullPolicy: Always
 ---
-# reids service is internal
+# redis service is internal
 apiVersion: v1
 kind: Service
 metadata:
-  name: reids
+  name: redis
   namespace: roboshop
 spec:
   selector:
-    app: reids
+    app: redis
     project: roboshop
     tier: db
 # the following means that if someone hits the service on port 27017 , it will be redirected to container.

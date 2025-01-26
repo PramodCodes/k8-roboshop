@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
-  namesace: roboshop
+  namespace: roboshop
   labels: #THESER ARE DEPLOYMENT LEVEL LABELS
     app: mongodb
     project: roboshop

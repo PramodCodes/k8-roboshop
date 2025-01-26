@@ -5,7 +5,7 @@ metadata:
   namespace: roboshop
 data:
   # property-like keys; each key maps to a simple value   # file-like keys
-  MONGO: true
+  MONGO: "true"
 ---
 apiVersion: apps/v1
 kind: Deployment

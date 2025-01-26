@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namesace: roboshop
+  labels: #THESER ARE DEPLOYMENT LEVEL LABELS
+    app: mongodb
+    project: roboshop
+    tier: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #THESE ARE replica set LEVEL LABELS to find pods
+      app: mongodb
+      project: roboshop
+      tier: db
+  template:
+    metadata:
+      labels: # THESE ARE POD LABELS
+        app: mongodb
+        project: roboshop
+        tier: db
+    spec:
+      containers:
+      - name: mongodb
+        image: pkainnet/mongodb:v1
+        imagePullPolicy: Always
+---
+# mongodb service is internal
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: roboshop
+spec:
+  selector:
+    app: mongodb
+    project: roboshop
+    tier: db
+# the following means that if someone hits the service on port 27017 , it will be redirected to container.
+  ports:
+  - protocol: TCP
+    port: 27017 #service port
+    targetPort: 27017 # container port
+

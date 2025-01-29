@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+  namespace: roboshop
+data:
+  # property-like keys; each key maps to a simple value   # file-like keys
+  MYSQL_DATABASE: "cities" 
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql
+  namespace: roboshop
+type: Opaque # means you cannot see that
+data:
+# we will need base 64 encoded
+  MYSQL_ROOT_PASSWORD: Um9ib1Nob3BAMQ==
+  MYSQL_USER: c2hpcHBpbmc=
+  MYSQL_PASSWORD: Um9ib1Nob3BAMQ==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: roboshop
+  labels: #THESER ARE DEPLOYMENT LEVEL LABELS
+    app: mysql
+    project: roboshop
+    tier: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #THESE ARE replica set LEVEL LABELS to find pods
+      app: mysql
+      project: roboshop
+      tier: db
+  template:
+    metadata:
+      labels: # THESE ARE POD LABELS
+        app: mysql
+        project: roboshop
+        tier: db
+    spec:
+      containers:
+      - name: mysql
+        image: pkainnet/mysql:v1
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: mysql
+        - secretRef:
+            name: mysql
+---
+# mysql service is internal
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: roboshop
+spec:
+  selector:
+    app: mysql
+    project: roboshop
+    tier: db
+# the following means that if someone hits the service on port 27017 , it will be redirected to container.
+  ports:
+  - protocol: TCP
+    port: 3306 #service port
+    targetPort: 3306 # container port
+
